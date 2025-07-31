@@ -1,22 +1,21 @@
+from collections import Counter
+
 def solution(data):
-
-    names = set([cat["alt"].split(":")[0] for cat in data])
-    widths = sorted([cat["width"] for cat in data])
-    heigths = sorted([cat["height"] for cat in data])
-    formats = {}
-
-    for cat in data:
-        ext = cat["filename"].split(".")[-1]
-        if ext in formats:
-            formats[ext] += 1
-        else:
-            formats[ext] = 1
+    # Use set comprehension for better memory efficiency
+    names = {cat["alt"].split(":")[0] for cat in data}
+    
+    # Use max() instead of sorting for O(n) instead of O(n log n)
+    widest = max(cat["width"] for cat in data)
+    tallest = max(cat["height"] for cat in data)
+    
+    # Use Counter for efficient counting
+    formats = Counter(cat["filename"].split(".")[-1] for cat in data)
 
     return {
         "uniquenames": len(names),
-        "widest": widths[-1],
-        "tallest": heigths[-1],
-        "formats": formats,
+        "widest": widest,
+        "tallest": tallest,
+        "formats": dict(formats),
     }
 
 
